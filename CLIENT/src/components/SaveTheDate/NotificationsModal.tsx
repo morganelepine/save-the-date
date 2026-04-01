@@ -9,12 +9,11 @@ import Button from "../../components/utils/Button";
 import { subscribeUser, sendTestNotification } from "../../subscribe";
 
 interface Props {
-    name: string | null;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
 }
 
-const NotificationsModal = ({ name, isOpen, setIsOpen }: Readonly<Props>) => {
+const NotificationsModal = ({ isOpen, setIsOpen }: Readonly<Props>) => {
     const hasPermission =
         "Notification" in globalThis && Notification.permission === "granted";
 
@@ -31,7 +30,7 @@ const NotificationsModal = ({ name, isOpen, setIsOpen }: Readonly<Props>) => {
         setIsLoading(true);
 
         try {
-            const success = await subscribeUser(name);
+            const success = await subscribeUser();
             if (success) {
                 setIsSubscribed(true);
             }
@@ -41,7 +40,7 @@ const NotificationsModal = ({ name, isOpen, setIsOpen }: Readonly<Props>) => {
     };
 
     const handleSendTestAndClose = () => {
-        sendTestNotification(name);
+        sendTestNotification();
         setIsOpen(false);
     };
 
@@ -70,8 +69,7 @@ const NotificationsModal = ({ name, isOpen, setIsOpen }: Readonly<Props>) => {
                         {isSubscribed ? (
                             <>
                                 <p className="text-rose-500">
-                                    Votre inscription a bien été prise en compte
-                                    !
+                                    Ton inscription a bien été prise en compte !
                                 </p>
                                 <Button
                                     label="Recevoir la notif de test"

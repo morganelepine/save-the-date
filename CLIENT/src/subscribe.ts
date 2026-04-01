@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function subscribeUser(name: string | null) {
+export async function subscribeUser() {
     //  Request permission for notifications
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
@@ -38,7 +38,7 @@ export async function subscribeUser(name: string | null) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 subscription,
-                user: name,
+                user: "Invité",
             }),
         });
 
@@ -66,14 +66,14 @@ function urlBase64ToUint8Array(base64String: string) {
     return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
 }
 
-export async function sendTestNotification(name: string | null) {
+export async function sendTestNotification() {
     const response = await fetch(
         `${API_URL}/notifications/sendSingleNotification`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                user: name,
+                user: "Invité",
             }),
         },
     );

@@ -4,8 +4,8 @@
 // iOS PWA: modal
 
 export const shouldShowNotifModal = () => {
-    const responseToSaveTheDate = localStorage.getItem("response");
-    if (!responseToSaveTheDate) return false;
+    const typewriterIsOver = localStorage.getItem("typewriterIsOver");
+    if (!typewriterIsOver) return false;
 
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isPWA = globalThis.matchMedia("(display-mode: standalone)").matches;

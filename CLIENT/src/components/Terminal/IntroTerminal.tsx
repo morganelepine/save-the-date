@@ -21,7 +21,7 @@ export default function IntroTerminal() {
                     </li>
                     <li>
                         <span className="font-bold text-sky-600">where</span> :
-                        Obtenir un indice sur le&nbsp;lieu
+                        Obtenir UN indice sur le&nbsp;lieu
                     </li>
                     <li>
                         <span className="font-bold text-rose-500">more</span> :
