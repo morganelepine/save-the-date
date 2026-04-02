@@ -12,7 +12,7 @@ export const handleTerminalCommand = (
     setHistory: (history: string[]) => void,
     moreCount: number,
     setMoreCount: (count: number) => void,
-    setAnimationKey: (key: number) => void,
+    setAnimationKey: (key: number | ((prev: number) => number)) => void,
 ) => {
     const newHistory = [...history, `$ ${command}`];
 

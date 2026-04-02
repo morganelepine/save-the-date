@@ -4,7 +4,7 @@ import Text from "../components/SaveTheDate/Text";
 import Button from "../components/utils/Button";
 import NotificationsModal from "../components/SaveTheDate/NotificationsModal";
 import Celebration from "../components/SaveTheDate/Celebration";
-import { shouldShowNotifModal } from "../helper/shouldShowNotificationsModal";
+import { getNotificationsModalState } from "../helper/shouldShowNotificationsModal";
 
 type Props = {
     navigate: (path: string) => void;
@@ -19,24 +19,29 @@ const SaveTheDate = ({
     setTypewriterIsOver,
     animationKey,
 }: Props) => {
-    const [modalIsOpen, setModalIsOpen] = useState(shouldShowNotifModal());
+    const initialModalState = getNotificationsModalState();
+    const [modalIsOpen, setModalIsOpen] = useState(
+        initialModalState.shouldOpen,
+    );
+    const [notificationsModalMode] = useState(initialModalState.mode);
     const [showCelebration, setShowCelebration] = useState(false);
     const [showFormattedText, setShowFormattedText] =
         useState(typewriterIsOver);
+    const [showButton, setShowButton] = useState(typewriterIsOver);
 
     useEffect(() => {
-        if (!typewriterIsOver || showFormattedText) {
-            return;
+        if (typewriterIsOver) {
+            setShowCelebration(true);
+            setShowButton(true);
         }
+    }, [typewriterIsOver]);
 
-        setShowCelebration(true);
-        const timeout = globalThis.setTimeout(() => {
-            setShowCelebration(false);
+    useEffect(() => {
+        if (localStorage.getItem("backToSaveTheDate") === "true") {
             setShowFormattedText(true);
-        }, 2400);
-
-        return () => globalThis.clearTimeout(timeout);
-    }, [typewriterIsOver, showFormattedText]);
+            setShowButton(true);
+        }
+    }, []);
 
     return (
         <Background>
@@ -44,6 +49,7 @@ const SaveTheDate = ({
                 <NotificationsModal
                     isOpen={modalIsOpen}
                     setIsOpen={setModalIsOpen}
+                    mode={notificationsModalMode}
                 ></NotificationsModal>
 
                 <Text
@@ -58,9 +64,9 @@ const SaveTheDate = ({
                     }}
                 />
 
-                {!showCelebration && <Celebration />}
+                {showCelebration && <Celebration />}
 
-                {showFormattedText && (
+                {showButton && (
                     <Button
                         label="Envie d'en savoir plus ? 👀"
                         color="multi"

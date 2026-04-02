@@ -1,37 +1,33 @@
+import { useState } from "react";
 import {
     Dialog,
     DialogPanel,
     DialogTitle,
     Description,
 } from "@headlessui/react";
-import { useEffect, useState } from "react";
 import Button from "../../components/utils/Button";
 import { subscribeUser, sendTestNotification } from "../../subscribe";
+import type { NotificationsModalMode } from "../../helper/shouldShowNotificationsModal";
 
 interface Props {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
+    mode: NotificationsModalMode;
 }
 
-const NotificationsModal = ({ isOpen, setIsOpen }: Readonly<Props>) => {
-    const hasPermission =
-        "Notification" in globalThis && Notification.permission === "granted";
-
+const NotificationsModal = ({ isOpen, setIsOpen, mode }: Readonly<Props>) => {
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        if (hasPermission) {
-            setIsSubscribed(true);
-        }
-    }, [hasPermission]);
+    const [feedback, setFeedback] = useState<string | null>(null);
 
     const handleSubscribe = async () => {
         setIsLoading(true);
+        setFeedback(null);
 
         try {
-            const success = await subscribeUser();
-            if (success) {
+            const result = await subscribeUser();
+            setFeedback(result.message);
+            if (result.success) {
                 setIsSubscribed(true);
             }
         } finally {
@@ -39,10 +35,58 @@ const NotificationsModal = ({ isOpen, setIsOpen }: Readonly<Props>) => {
         }
     };
 
-    const handleSendTestAndClose = () => {
-        sendTestNotification();
-        setIsOpen(false);
+    const handleSendTestAndClose = async () => {
+        setIsLoading(true);
+        setFeedback(null);
+
+        try {
+            const result = await sendTestNotification();
+            setFeedback(result.message);
+            if (result.success) {
+                setIsOpen(false);
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
+
+    let actionContent = (
+        <Button
+            label={
+                isLoading
+                    ? "Activation en cours..."
+                    : "Activer les notifications"
+            }
+            color="multi"
+            disabled={isLoading || mode === "permission-blocked"}
+            onClick={handleSubscribe}
+        />
+    );
+
+    if (mode === "ios-install-required") {
+        actionContent = (
+            <Button
+                label="Fermer"
+                color="multi"
+                onClick={() => setIsOpen(false)}
+            />
+        );
+    }
+
+    if (isSubscribed) {
+        actionContent = (
+            <Button
+                label={
+                    isLoading
+                        ? "Envoi en cours..."
+                        : "Recevoir la notif de test"
+                }
+                color="multi"
+                disabled={isLoading}
+                onClick={handleSendTestAndClose}
+            />
+        );
+    }
 
     return (
         <Dialog
@@ -60,34 +104,34 @@ const NotificationsModal = ({ isOpen, setIsOpen }: Readonly<Props>) => {
                     </DialogTitle>
 
                     <Description>
-                        Active les notifications pour recevoir les infos
-                        importantes (promis, seulement l’essentiel — on n'aime
+                        Activez les notifications pour recevoir les infos
+                        importantes (promis, seulement l’essentiel, on n'aime
                         pas le spam non plus 😉)
                     </Description>
 
+                    {mode === "ios-install-required" && (
+                        <p className="text-sm text-stone-700 italic">
+                            Sur iPhone, les notifications fonctionnent
+                            uniquement si l’app est installée sur l’écran
+                            d’accueil.
+                        </p>
+                    )}
+
+                    {mode === "permission-blocked" && (
+                        <p className="text-sm text-stone-700 italic">
+                            Les notifications sont bloquées dans le navigateur.
+                            Autorisez-les dans les réglages du site puis
+                            rechargez la page.
+                        </p>
+                    )}
+
                     <div className="flex flex-col items-center justify-center space-y-4">
-                        {isSubscribed ? (
-                            <>
-                                <p className="text-rose-500">
-                                    Ton inscription a bien été prise en compte !
-                                </p>
-                                <Button
-                                    label="Recevoir la notif de test"
-                                    color="multi"
-                                    onClick={handleSendTestAndClose}
-                                />
-                            </>
-                        ) : (
-                            <Button
-                                label={
-                                    isLoading
-                                        ? "Activation en cours..."
-                                        : "Activer les notifications"
-                                }
-                                color="multi"
-                                disabled={isLoading}
-                                onClick={handleSubscribe}
-                            />
+                        {actionContent}
+
+                        {feedback && (
+                            <p className="text-sm text-stone-700 italic">
+                                {feedback}
+                            </p>
                         )}
                     </div>
                 </DialogPanel>

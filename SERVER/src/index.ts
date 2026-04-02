@@ -1,49 +1,53 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import cors from "cors";
-import { NotificationsRoutes } from "./routes/notifications.routes";
+import { NotificationsController } from "./controllers/notifications.controllers";
 
 const app: Application = express();
+
+const allowedOrigins = new Set(["http://localhost:5174"]);
+
 app.use(
     cors({
-        origin: [
-            "https://www.morgane-et-arthur.fr",
-            "https://prochain-projet.vercel.app",
-            "http://localhost:5173",
-        ],
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.has(origin)) {
+                callback(null, true);
+                return;
+            }
+
+            callback(null, false);
+        },
     }),
 );
 
 app.use(express.json());
 
-NotificationsRoutes.forEach((route) => {
-    (app as any)[route.method](
-        route.route,
-        async (
-            req: express.Request,
-            res: express.Response,
-            next: express.NextFunction,
-        ) => {
-            try {
-                const controller = new route.controller();
-                const result = await controller[route.action](req, res);
-                return result;
-            } catch (error) {
-                next(error);
-            }
-        },
-    );
+const notificationsController = new NotificationsController();
+
+app.post("/notifications/subscribe", (req, res, next) => {
+    notificationsController.subscribeToNotification(req, res).catch(next);
 });
 
-app.use((req, res, next) => {
-    console.log("Incoming request:", req.method, req.url);
-    next();
+app.post("/notifications/sendSingleNotification", (req, res, next) => {
+    notificationsController.sendSingleNotification(req, res).catch(next);
 });
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("SaveTheDate API working ✅");
+app.post("/notifications/sendCommonNotification", (req, res, next) => {
+    notificationsController.sendCommonNotification(req, res).catch(next);
 });
+
+app.use(
+    (
+        error: Error,
+        _req: express.Request,
+        res: express.Response,
+        _next: express.NextFunction,
+    ) => {
+        console.error("Unhandled server error:", error);
+        res.status(500).json({ error: "Internal server error" });
+    },
+);
 
 export default app;

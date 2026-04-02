@@ -1,5 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { shouldShowNotifModal } from "../shouldShowNotificationsModal";
+import {
+    getNotificationsModalState,
+    shouldShowNotifModal,
+} from "../shouldShowNotificationsModal";
 
 // npx vitest test
 
@@ -26,12 +29,10 @@ const mockNotification = (permission: NotificationPermission | undefined) => {
 };
 
 describe("shouldShowNotifModal", () => {
-    let alertMock: ReturnType<typeof vi.fn>;
-
     beforeEach(() => {
-        alertMock = vi.fn();
-        // @ts-expect-error
-        globalThis.alert = alertMock;
+        vi.stubGlobal("localStorage", {
+            getItem: vi.fn().mockReturnValue("true"),
+        });
     });
 
     afterEach(() => {
@@ -60,6 +61,7 @@ describe("shouldShowNotifModal", () => {
         setUserAgent("Android");
 
         expect(shouldShowNotifModal()).toBe(true);
+        expect(getNotificationsModalState().mode).toBe("subscribe");
     });
 
     it("should return true on Desktop if permission is not granted", () => {
@@ -68,17 +70,16 @@ describe("shouldShowNotifModal", () => {
         setUserAgent("Desktop");
 
         expect(shouldShowNotifModal()).toBe(true);
+        expect(getNotificationsModalState().mode).toBe("subscribe");
     });
 
-    it("should return false on iOS but not PWA", () => {
+    it("should return true on iOS but not PWA with install-required mode", () => {
         mockNotification("default");
         mockMatchMedia(false);
         setUserAgent("iPhone");
 
-        expect(shouldShowNotifModal()).toBe(false);
-        expect(alertMock).toHaveBeenCalledWith(
-            "Pour recevoir les notifications sur iPhone, installe l’app sur l’écran d’accueil",
-        );
+        expect(shouldShowNotifModal()).toBe(true);
+        expect(getNotificationsModalState().mode).toBe("ios-install-required");
     });
 
     it("should return true on an iOs PWA", () => {
@@ -87,5 +88,15 @@ describe("shouldShowNotifModal", () => {
         setUserAgent("iPhone");
 
         expect(shouldShowNotifModal()).toBe(true);
+        expect(getNotificationsModalState().mode).toBe("subscribe");
+    });
+
+    it("should open modal in permission-blocked mode", () => {
+        mockNotification("denied");
+        mockMatchMedia(false);
+        setUserAgent("Desktop");
+
+        expect(shouldShowNotifModal()).toBe(true);
+        expect(getNotificationsModalState().mode).toBe("permission-blocked");
     });
 });

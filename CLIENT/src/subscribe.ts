@@ -1,58 +1,160 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function subscribeUser() {
-    //  Request permission for notifications
-    const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-        console.log("Permission not granted for Notification");
-        return;
+type SubscribeResult = {
+    success: boolean;
+    message: string;
+};
+
+type ApiErrorBody = {
+    error?: string;
+    message?: string;
+};
+
+type NotificationSubscriptionPayload = {
+    endpoint: string;
+    keys: {
+        p256dh: string;
+        auth: string;
+    };
+};
+
+const isPushSupported = () => {
+    return (
+        "Notification" in globalThis &&
+        "serviceWorker" in navigator &&
+        "PushManager" in globalThis
+    );
+};
+
+const getErrorMessageFromResponse = async (
+    response: Response,
+    fallback: string,
+) => {
+    const rawText = await response.text();
+
+    if (!rawText) {
+        return `${fallback} (HTTP ${response.status})`;
     }
 
-    // Register service worker
-    const registration = await navigator.serviceWorker.ready;
-    navigator.serviceWorker.ready.then((registration) => {
-        console.log("Service worker ready:", registration);
-    });
-
-    // Delete old subscription if necessary
-    const existingSubscription =
-        await registration.pushManager.getSubscription();
-    if (existingSubscription) {
-        await existingSubscription.unsubscribe();
-        console.log("Old subscription deleted");
-    }
-
-    // Create new subscription
-    const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(
-            import.meta.env.VITE_PUBLIC_VAPID_KEY,
-        ),
-    });
-    console.log("User is subscribed:", subscription);
-
-    // Send to server
     try {
+        const parsed = JSON.parse(rawText) as ApiErrorBody;
+        return (
+            parsed.error ??
+            parsed.message ??
+            `${fallback} (HTTP ${response.status})`
+        );
+    } catch {
+        return `${fallback} (HTTP ${response.status})`;
+    }
+};
+
+const getCurrentSubscription =
+    async (): Promise<NotificationSubscriptionPayload | null> => {
+        const registration = await navigator.serviceWorker.ready;
+        const existingSubscription =
+            await registration.pushManager.getSubscription();
+
+        if (!existingSubscription) {
+            return null;
+        }
+
+        const serialized = existingSubscription.toJSON();
+        if (
+            !serialized.endpoint ||
+            !serialized.keys?.p256dh ||
+            !serialized.keys?.auth
+        ) {
+            return null;
+        }
+
+        return {
+            endpoint: serialized.endpoint,
+            keys: {
+                p256dh: serialized.keys.p256dh,
+                auth: serialized.keys.auth,
+            },
+        };
+    };
+
+export async function subscribeUser(): Promise<SubscribeResult> {
+    if (!isPushSupported()) {
+        return {
+            success: false,
+            message:
+                "Ce navigateur ne supporte pas les notifications push (service worker requis)",
+        };
+    }
+
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+            return {
+                success: false,
+                message:
+                    permission === "denied"
+                        ? "Les notifications sont bloquées. Autorisez-les dans les réglages du navigateur."
+                        : "Autorisation notifications non accordée",
+            };
+        }
+
+        const registration = await navigator.serviceWorker.ready;
+        const currentSubscription =
+            await registration.pushManager.getSubscription();
+        const subscription =
+            currentSubscription ??
+            (await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(
+                    import.meta.env.VITE_PUBLIC_VAPID_KEY,
+                ),
+            }));
+
+        const serialized = subscription.toJSON();
+        if (
+            !serialized.endpoint ||
+            !serialized.keys?.p256dh ||
+            !serialized.keys?.auth
+        ) {
+            return {
+                success: false,
+                message: "Abonnement invalide",
+            };
+        }
+
         const response = await fetch(`${API_URL}/notifications/subscribe`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                subscription,
-                user: "Invité",
+                subscription: {
+                    endpoint: serialized.endpoint,
+                    keys: {
+                        p256dh: serialized.keys.p256dh,
+                        auth: serialized.keys.auth,
+                    },
+                },
             }),
         });
 
-        const data = await response.json();
-        if (response.ok) {
-            console.log("Subscription saved:", data);
-            return true;
-        } else {
-            console.error("Server returned an error:", response.status, data);
-            return false;
+        if (!response.ok) {
+            return {
+                success: false,
+                message: await getErrorMessageFromResponse(
+                    response,
+                    "Impossible d'enregistrer l'abonnement",
+                ),
+            };
         }
-    } catch (err) {
-        console.error("Fetch failed:", err);
-        return false;
+
+        return {
+            success: true,
+            message: "Notifications activées avec succès !",
+        };
+    } catch (error) {
+        console.error("subscribeUser failed", error);
+        return {
+            success: false,
+            message: "Une erreur est survenue pendant l'activation",
+        };
     }
 }
 
@@ -66,21 +168,52 @@ function urlBase64ToUint8Array(base64String: string) {
     return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
 }
 
-export async function sendTestNotification() {
-    const response = await fetch(
-        `${API_URL}/notifications/sendSingleNotification`,
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                user: "Invité",
-            }),
-        },
-    );
-    const data = await response.json();
-    if (response.ok) {
-        console.log("Notif sent:", data);
-    } else {
-        console.error("Server returned an error:", response.status, data);
+export async function sendTestNotification(): Promise<SubscribeResult> {
+    if (!isPushSupported()) {
+        return {
+            success: false,
+            message: "Notifications push non supportées sur cet appareil",
+        };
+    }
+
+    try {
+        const subscription = await getCurrentSubscription();
+
+        if (!subscription) {
+            return {
+                success: false,
+                message: "Aucun abonnement actif trouvé sur cet appareil",
+            };
+        }
+
+        const response = await fetch(
+            `${API_URL}/notifications/sendSingleNotification`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ subscription }),
+            },
+        );
+
+        if (!response.ok) {
+            return {
+                success: false,
+                message: await getErrorMessageFromResponse(
+                    response,
+                    "Échec de l'envoi de la notification de test",
+                ),
+            };
+        }
+
+        return {
+            success: true,
+            message: "Notification de test envoyée !",
+        };
+    } catch (error) {
+        console.error("sendTestNotification failed", error);
+        return {
+            success: false,
+            message: "Une erreur est survenue pendant l'envoi du test",
+        };
     }
 }

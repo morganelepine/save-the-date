@@ -1,30 +1,41 @@
-// Permission already granted: no modal
-// Android and desktop: modal
-// iOS navigator: alert (notif only supported on PWA)
-// iOS PWA: modal
+export type NotificationsModalMode =
+    | "subscribe"
+    | "permission-blocked"
+    | "ios-install-required";
 
-export const shouldShowNotifModal = () => {
-    const typewriterIsOver = localStorage.getItem("typewriterIsOver");
-    if (!typewriterIsOver) return false;
+export type NotificationsModalState = {
+    shouldOpen: boolean;
+    mode: NotificationsModalMode;
+};
+
+export const getNotificationsModalState = (): NotificationsModalState => {
+    const typewriterIsOver =
+        localStorage.getItem("typewriterIsOver") === "true";
+    if (!typewriterIsOver) {
+        return { shouldOpen: false, mode: "subscribe" };
+    }
 
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isPWA = globalThis.matchMedia("(display-mode: standalone)").matches;
 
-    if (
-        !("Notification" in globalThis) ||
-        Notification.permission === "granted"
-    ) {
-        return false;
+    if (!("Notification" in globalThis)) {
+        return { shouldOpen: false, mode: "subscribe" };
     }
 
-    if (isIOS) {
-        if (!isPWA) {
-            alert(
-                "Pour recevoir les notifications sur iPhone, installe l’app sur l’écran d’accueil",
-            );
-        }
-        return isPWA;
+    if (Notification.permission === "granted") {
+        return { shouldOpen: false, mode: "subscribe" };
     }
 
-    return true; // Desktop + Android
+    if (isIOS && !isPWA) {
+        return { shouldOpen: true, mode: "ios-install-required" };
+    }
+
+    if (Notification.permission === "denied") {
+        return { shouldOpen: true, mode: "permission-blocked" };
+    }
+
+    return { shouldOpen: true, mode: "subscribe" };
 };
+
+export const shouldShowNotifModal = () =>
+    getNotificationsModalState().shouldOpen;

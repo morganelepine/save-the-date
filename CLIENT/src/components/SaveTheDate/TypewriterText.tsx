@@ -12,7 +12,7 @@ const TypewriterText = ({ setTypewriterIsOver }: Props) => {
                     .typeString("Événement critique détecté")
                     .pauseFor(1000)
                     .typeString(
-                        "<br/>Éléa & Païkan lancent une mise à jour maj",
+                        "<br/>Morgane & Arthur lancent une mise à jour maj",
                     )
                     .deleteChars(3)
                     .typeString("MAJEURE de leur histoire")
@@ -20,14 +20,14 @@ const TypewriterText = ({ setTypewriterIsOver }: Props) => {
                     .typeString("<br/>Un mariage")
                     .deleteChars(2)
                     .typeString(
-                        "nniversaire pour célébrer leurs 105 ans d'amour",
+                        "nniversaire pour célébrer leurs 15 ans d'amour",
                     )
                     .pauseFor(1000)
                     .typeString(
                         "<br/>Une fête de mariage mais sans paperasse quoi",
                     )
                     .pauseFor(1000)
-                    .typeString("<br/>Le week-end du 36-54 avrillet 1968")
+                    .typeString("<br/>Le week-end du 13-14 juin 2026")
                     .pauseFor(1000)
                     .typeString("<br/>SAVE THE DATE ! ! !")
                     .pauseFor(1000)

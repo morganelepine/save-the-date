@@ -3,10 +3,15 @@ interface Props {
 }
 
 export default function BackToButton({ navigate }: Readonly<Props>) {
+    const handleClick = () => {
+        navigate("/save-the-date");
+        localStorage.setItem("backToSaveTheDate", "true");
+    };
+
     return (
         <button
             className="flex items-center gap-2 cursor-pointer border rounded-full py-2 px-4 border-gray-300 hover:font-bold hover:border-gray-400 text-sm"
-            onClick={() => navigate("/save-the-date")}
+            onClick={handleClick}
             style={{ lineHeight: "unset" }}
         >
             <span className="text-violet-400">Retour</span>

@@ -13,6 +13,5 @@ model PushSubscription {
   endpoint  String   @unique
   p256dh    String
   auth      String
-  user      String?  @unique
   createdAt DateTime @default(now())
 }

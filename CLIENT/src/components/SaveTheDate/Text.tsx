@@ -25,7 +25,7 @@ const Text = ({
                 </p>
                 <p>
                     <span className="text-amber-500 font-bold">
-                        Éléa & Païkan
+                        Morgane & Arthur
                     </span>{" "}
                     lancent une&nbsp;
                     <span className="text-emerald-500 font-bold">
@@ -40,7 +40,7 @@ const Text = ({
                     </span>{" "}
                     pour célébrer leurs{" "}
                     <span className="text-sky-500 font-bold">
-                        105 ans d'amour
+                        15 ans d'amour
                     </span>
                 </p>
                 <p>
@@ -53,7 +53,7 @@ const Text = ({
                 <p>
                     Le week-end du{" "}
                     <span className="text-amber-500 font-bold">
-                        36-54 avrillet 1968
+                        13-14 juin 2026
                     </span>
                 </p>
                 <p>
