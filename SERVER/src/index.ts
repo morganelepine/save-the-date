@@ -7,7 +7,10 @@ import { NotificationsController } from "./controllers/notifications.controllers
 
 const app: Application = express();
 
-const allowedOrigins = new Set(["http://localhost:5174"]);
+const allowedOrigins = new Set([
+    "http://localhost:5174",
+    "https://save-the-daaate.vercel.app/",
+]);
 
 app.use(
     cors({
@@ -36,6 +39,10 @@ app.post("/notifications/sendSingleNotification", (req, res, next) => {
 
 app.post("/notifications/sendCommonNotification", (req, res, next) => {
     notificationsController.sendCommonNotification(req, res).catch(next);
+});
+
+app.get("/", (req: express.Request, res: express.Response) => {
+    res.send("save-the-date API working ✅");
 });
 
 app.use(

@@ -87,8 +87,8 @@ export class NotificationsController {
         const payload = {
             title: "Hello 👋",
             body: "Ceci est une notif de test 🎉",
-            icon: "https://prochain-projet.vercel.app/icon-192x192.png",
-            badge: "https://prochain-projet.vercel.app/15.png",
+            icon: "https://save-the-daaate.vercel.app/icon-192x192.png",
+            badge: "https://save-the-daaate.vercel.app/15.png",
         };
 
         try {
@@ -125,8 +125,8 @@ export class NotificationsController {
         const payload = JSON.stringify({
             title: "Hello 👋",
             body: "Ceci est une notif de test 🎉",
-            icon: "https://prochain-projet.vercel.app/icon-192x192.png",
-            badge: "https://prochain-projet.vercel.app/15.png",
+            icon: "https://save-the-daaate.vercel.app/icon-192x192.png",
+            badge: "https://save-the-daaate.vercel.app/15.png",
         });
 
         const subscriptions = await prisma.pushSubscription.findMany();

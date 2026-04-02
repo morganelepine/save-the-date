@@ -1,6 +1,6 @@
 # Save the Date 🩷💛🧡
 
-Application web progressive (PWA) de type « save the date » pour annoncer un événement. Les invités découvrent l'annonce via un effet typewriter, peuvent obtenir des indices sur le lieu via un terminal interactif, et s'abonner aux notifications push pour recevoir des informations supplémentaires.
+Application web progressive (PWA) de type « save the date » pour annoncer un événement. Les invité·e·s découvrent l'annonce via un effet typewriter, peuvent obtenir des indices sur le lieu via un terminal interactif, et s'abonner aux notifications push pour recevoir des informations supplémentaires.
 
 ## Fonctionnalités
 
@@ -12,11 +12,11 @@ Application web progressive (PWA) de type « save the date » pour annoncer un �
 
 ## Stack technique
 
-| Côté            | Technologies                                                                         |
-| --------------- | ------------------------------------------------------------------------------------ |
-| **CLIENT**      | React 19, TypeScript, Vite, Tailwind CSS 4, React Router, Headless UI, Workbox (PWA) |
-| **SERVER**      | Node.js, Express 5, TypeScript, Prisma (PostgreSQL), Web Push                        |
-| **Déploiement** | Vercel (server + client)                                                             |
+| Côté            | Technologies                                                                                 |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| **Client**      | React 19, TypeScript, Vite, Tailwind CSS 4, React Router, Headless UI, Workbox (PWA), Vitest |
+| **Serveur**     | Node.js, Express 5, TypeScript, Prisma (PostgreSQL), Web Push                                |
+| **Déploiement** | Vercel (server + client)                                                                     |
 
 ## Prérequis
 
