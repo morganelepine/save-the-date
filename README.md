@@ -2,6 +2,8 @@
 
 Application web progressive (PWA) de type « save the date » pour annoncer un événement. Les invité·e·s découvrent l'annonce via un effet typewriter, peuvent obtenir des indices sur le lieu via un terminal interactif, et s'abonner aux notifications push pour recevoir des informations supplémentaires.
 
+Démo en ligne : https://save-the-daaate.vercel.app/
+
 ## Fonctionnalités
 
 - **Page d'accueil** — invite à installer l'app sur l'écran d'accueil (mobile)

@@ -9,7 +9,7 @@ const app: Application = express();
 
 const allowedOrigins = new Set([
     "http://localhost:5174",
-    "https://save-the-daaate.vercel.app/",
+    "https://save-the-daaate.vercel.app",
 ]);
 
 app.use(
