@@ -6,7 +6,7 @@ import {
     Description,
 } from "@headlessui/react";
 import Button from "../../components/utils/Button";
-import { subscribeUser, sendTestNotification } from "../../subscribe";
+import { subscribeUser, sendTestNotification } from "../../services/subscribe";
 import type { NotificationsModalMode } from "../../helper/shouldShowNotificationsModal";
 
 interface Props {

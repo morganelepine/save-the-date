@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Registration from "./screens/Registration";
 import Terminal from "./screens/Terminal";
 import SaveTheDate from "./screens/SaveTheDate";
-import { handleTerminalCommand } from "./helper/useHandleTerminalCommand";
+import { handleTerminalCommand } from "./hooks/useHandleTerminalCommand";
 
 export default function App() {
     const navigate = useNavigate();
