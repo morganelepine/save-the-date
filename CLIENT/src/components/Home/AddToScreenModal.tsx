@@ -21,7 +21,7 @@ const AddToScreenModal = ({ isOpen, setIsOpen }: Readonly<Props>) => {
             </DialogTitle>
             <div className="flex flex-col space-y-6 text-left">
                 <div className="flex items-center gap-2 flex-nowrap">
-                    <div className="w-6 h-6 pt-0.5 flex items-center justify-center rounded-full bg-sky-500 text-white text-sm">
+                    <div className="w-6 h-6 pt-0.5 shrink-0 flex items-center justify-center rounded-full bg-sky-500 text-white text-sm">
                         1
                     </div>
                     <p className="flex flex-wrap items-center whitespace-nowrap">
@@ -35,14 +35,14 @@ const AddToScreenModal = ({ isOpen, setIsOpen }: Readonly<Props>) => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 pt-0.5 flex items-center justify-center rounded-full bg-violet-500 text-white text-sm">
+                    <div className="w-6 h-6 pt-0.5 shrink-0 flex items-center justify-center rounded-full bg-violet-500 text-white text-sm">
                         2
                     </div>
                     <p>Sélectionne "Ajouter à l'écran d'accueil"</p>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 pt-0.5 flex items-center justify-center rounded-full bg-pink-500 text-white text-sm">
+                    <div className="w-6 h-6 pt-0.5 shrink-0 flex items-center justify-center rounded-full bg-pink-500 text-white text-sm">
                         3
                     </div>
                     <p>Confirme en cliquant sur "Installer"</p>
