@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
     getNotificationsModalState,
     shouldShowNotifModal,
-} from "../shouldShowNotificationsModal";
+} from "../helper/shouldShowNotificationsModal";
 
 // npx vitest test
 
