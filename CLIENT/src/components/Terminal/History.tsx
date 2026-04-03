@@ -1,8 +1,30 @@
+import { useEffect, useRef } from "react";
+
 interface Props {
     history: string[];
 }
 
 export default function History({ history }: Readonly<Props>) {
+    const lastCmdRef = useRef<HTMLParagraphElement | null>(null);
+
+    useEffect(() => {
+        const last = history[history.length - 1];
+        const isFinalResponse =
+            last?.startsWith("[🐱KiwIA]") &&
+            last !== "[🐱KiwIA] Laisse-moi réfléchir...";
+        if (isFinalResponse) {
+            lastCmdRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+    }, [history]);
+
+    const lastCmdIndex = history.reduceRight(
+        (acc, line, i) => (acc === -1 && line.startsWith("$ ") ? i : acc),
+        -1,
+    );
+
     return (
         <div className="mt-4">
             {history.map((line, index) => {
@@ -13,7 +35,8 @@ export default function History({ history }: Readonly<Props>) {
                 return (
                     <p
                         key={`${line}-${index}`}
-                        className={`${color} ${spacing} ${color}`}
+                        ref={index === lastCmdIndex ? lastCmdRef : undefined}
+                        className={`${color} ${spacing}`}
                     >
                         {line}
                     </p>

@@ -22,7 +22,13 @@ export default function TerminalInput({
 
     const endRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
-        endRef.current?.scrollIntoView({ behavior: "smooth" });
+        const last = history.at(-1);
+        const isFinalResponse =
+            last?.startsWith("[🐱KiwIA]") &&
+            last !== "[🐱KiwIA] Laisse-moi réfléchir...";
+        if (!isFinalResponse) {
+            endRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
     }, [history]);
 
     return (
@@ -34,6 +40,7 @@ export default function TerminalInput({
                     className="text-white outline-none border-none w-full"
                     autoFocus
                     type="text"
+                    id="terminal-input"
                     value={input}
                     placeholder={placeholderText}
                     onChange={(e) => setInput(e.target.value)}
