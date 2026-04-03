@@ -9,8 +9,6 @@ export default function App() {
     const navigate = useNavigate();
     const [history, setHistory] = useState<string[]>([]);
     const [typewriterIsOver, setTypewriterIsOver] = useState<boolean>(false);
-    const [animationKey, setAnimationKey] = useState(0);
-    const [moreCount, setMoreCount] = useState(0);
 
     useEffect(() => {
         const typewriterIsOver = localStorage.getItem("typewriterIsOver");
@@ -29,7 +27,6 @@ export default function App() {
                         navigate={navigate}
                         typewriterIsOver={typewriterIsOver}
                         setTypewriterIsOver={setTypewriterIsOver}
-                        animationKey={animationKey}
                     />
                 }
             />
@@ -40,14 +37,7 @@ export default function App() {
                         navigate={navigate}
                         history={history}
                         handleCommand={(command) =>
-                            handleTerminalCommand(
-                                command,
-                                history,
-                                setHistory,
-                                moreCount,
-                                setMoreCount,
-                                setAnimationKey,
-                            )
+                            handleTerminalCommand(command, history, setHistory)
                         }
                     />
                 }

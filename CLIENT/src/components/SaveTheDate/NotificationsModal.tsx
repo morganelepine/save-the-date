@@ -104,7 +104,7 @@ const NotificationsModal = ({ isOpen, setIsOpen, mode }: Readonly<Props>) => {
                     </DialogTitle>
 
                     <Description>
-                        Activez les notifications pour recevoir les infos
+                        Active les notifications pour recevoir les infos
                         importantes (promis, seulement l’essentiel, on n'aime
                         pas le spam non plus 😉)
                     </Description>
@@ -120,8 +120,8 @@ const NotificationsModal = ({ isOpen, setIsOpen, mode }: Readonly<Props>) => {
                     {mode === "permission-blocked" && (
                         <p className="text-sm text-stone-700 italic">
                             Les notifications sont bloquées dans le navigateur.
-                            Autorisez-les dans les réglages du site puis
-                            rechargez la page.
+                            Autorise-les dans les réglages du site puis recharge
+                            la page.
                         </p>
                     )}
 

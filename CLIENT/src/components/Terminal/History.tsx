@@ -4,19 +4,17 @@ interface Props {
 
 export default function History({ history }: Readonly<Props>) {
     return (
-        <div className="space-y-1 mt-4">
+        <div className="mt-4">
             {history.map((line, index) => {
-                let color = "text-white";
-
-                if (line.startsWith("[ERROR]")) color = "text-red-400";
-                else if (line.startsWith("[INFO]") || line.startsWith("_"))
-                    color = "text-emerald-400";
-                else if (line.startsWith("[HINT]") || line.startsWith("Indice"))
-                    color = "text-sky-300";
-                else if (line.startsWith("[WARN]")) color = "text-amber-500";
+                const isCommand = line.startsWith("$");
+                const spacing = isCommand && index !== 0 ? "mt-4" : "mt-1";
+                const color = isCommand ? "text-amber-500" : "text-white";
 
                 return (
-                    <p key={`${line}-${index}`} className={`${color}`}>
+                    <p
+                        key={`${line}-${index}`}
+                        className={`${color} ${spacing} ${color}`}
+                    >
                         {line}
                     </p>
                 );

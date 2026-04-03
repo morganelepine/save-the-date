@@ -1,62 +1,38 @@
-const moreHints = [
-    '[HINT] La préfecture de ce département est une "ville de riches"',
-    "[HINT] Non loin du lieu, un village a donné son nom à un fromage de chèvre",
-    "[HINT] Un autre village des alentours porte le nom d'un célèbre vin blanc",
-];
-const firstEndMessage = "C'est tout ...pour le moment";
-const secondEndMessage = "C'est tout on a dit !!!";
+import { askAI } from "../services/ai";
+
+const buildConversationHistory = (
+    history: string[],
+): { role: "user" | "assistant"; content: string }[] => {
+    const result: { role: "user" | "assistant"; content: string }[] = [];
+    for (const line of history) {
+        if (line.startsWith("$ ")) {
+            result.push({ role: "user", content: line.slice(2) });
+        } else if (line.startsWith("[🐱KiwIA]")) {
+            result.push({ role: "assistant", content: line });
+        }
+    }
+    return result;
+};
 
 export const handleTerminalCommand = (
     command: string,
     history: string[],
     setHistory: (history: string[]) => void,
-    moreCount: number,
-    setMoreCount: (count: number) => void,
-    setAnimationKey: (key: number | ((prev: number) => number)) => void,
 ) => {
+    if (!command.trim()) return;
+
+    const conversationHistory = buildConversationHistory(history);
     const newHistory = [...history, `$ ${command}`];
+    setHistory([...newHistory, "[🐱KiwIA] Laisse-moi réfléchir..."]);
 
-    switch (command.toLowerCase()) {
-        case "reset":
-            setAnimationKey((prev) => prev + 1);
-            setHistory([]);
-            setMoreCount(0);
-            return;
-
-        case "where":
+    askAI(command, conversationHistory)
+        .then((reply) => {
+            setHistory([...newHistory, reply]);
+        })
+        .catch(() => {
             setHistory([
                 ...newHistory,
-                "[HINT] On trouve dans la région certains des plus beaux châteaux du pays",
+                "[🐱KiwIA] Oops KiwIA est en train de faire la sieste...",
             ]);
-            return;
-
-        case "more":
-            if (moreCount < moreHints.length) {
-                setHistory([...newHistory, moreHints[moreCount]]);
-            } else if (moreCount > moreHints.length) {
-                setHistory([...newHistory, `[ERROR] ${secondEndMessage}`]);
-            } else {
-                setHistory([...newHistory, `[WARN] ${firstEndMessage}`]);
-            }
-            setMoreCount(moreCount + 1);
-            return;
-
-        case "help":
-            setHistory([
-                ...newHistory,
-                "[INFO]",
-                "_help: Afficher la liste des commandes",
-                "_where: Obtenir UN indice sur le lieu",
-                "_more: Obtenir d'autres indices",
-                "_reset: Effacer l'historique",
-            ]);
-            return;
-
-        default:
-            setHistory([
-                ...newHistory,
-                `[ERROR] Commande inconnue : ${command}`,
-            ]);
-            return;
-    }
+        });
 };

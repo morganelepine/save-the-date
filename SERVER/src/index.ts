@@ -4,6 +4,7 @@ dotenv.config();
 import express, { Application } from "express";
 import cors from "cors";
 import { NotificationsController } from "./controllers/notifications.controllers";
+import { AIController } from "./controllers/ai.controller";
 
 const app: Application = express();
 
@@ -28,6 +29,7 @@ app.use(
 app.use(express.json());
 
 const notificationsController = new NotificationsController();
+const aiController = new AIController();
 
 app.post("/notifications/subscribe", (req, res, next) => {
     notificationsController.subscribeToNotification(req, res).catch(next);
@@ -39,6 +41,10 @@ app.post("/notifications/sendSingleNotification", (req, res, next) => {
 
 app.post("/notifications/sendCommonNotification", (req, res, next) => {
     notificationsController.sendCommonNotification(req, res).catch(next);
+});
+
+app.post("/ai/hint", (req, res, next) => {
+    aiController.getHint(req, res).catch(next);
 });
 
 app.get("/", (req: express.Request, res: express.Response) => {

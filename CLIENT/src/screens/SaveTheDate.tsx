@@ -10,14 +10,12 @@ type Props = {
     navigate: (path: string) => void;
     typewriterIsOver: boolean;
     setTypewriterIsOver: (value: boolean) => void;
-    animationKey: number;
 };
 
 const SaveTheDate = ({
     navigate,
     typewriterIsOver,
     setTypewriterIsOver,
-    animationKey,
 }: Props) => {
     const initialModalState = getNotificationsModalState();
     const [modalIsOpen, setModalIsOpen] = useState(
@@ -53,7 +51,6 @@ const SaveTheDate = ({
                 ></NotificationsModal>
 
                 <Text
-                    key={animationKey}
                     typewriterIsOver={typewriterIsOver}
                     showFormattedText={showFormattedText}
                     setTypewriterIsOver={(value) => {

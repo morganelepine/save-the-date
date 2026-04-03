@@ -10,7 +10,8 @@ export default function TerminalInput({
     history,
 }: Readonly<Props>) {
     const [input, setInput] = useState("");
-    const placeholderText = history.length === 0 ? "Tape 'where'" : "";
+    const placeholderText =
+        history.length === 0 ? "Tape 'Donne-moi un indice'" : "";
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
@@ -26,7 +27,7 @@ export default function TerminalInput({
 
     return (
         <>
-            <div ref={endRef} className="pt-4 sm:pt-6"></div>
+            <div ref={endRef} className="pt-4"></div>
             <div className="flex">
                 <span className="text-white pr-2">$</span>
                 <input

@@ -92,7 +92,7 @@ export async function subscribeUser(): Promise<SubscribeResult> {
                 success: false,
                 message:
                     permission === "denied"
-                        ? "Les notifications sont bloquées. Autorisez-les dans les réglages du navigateur."
+                        ? "Les notifications sont bloquées. Autorise-les dans les réglages du navigateur."
                         : "Autorisation notifications non accordée",
             };
         }

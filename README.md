@@ -8,7 +8,7 @@ Démo en ligne : https://save-the-daaate.vercel.app/
 
 - **Page d'accueil** — invite à installer l'app sur l'écran d'accueil (mobile)
 - **Save the date** — révélation du message animé (typewriter + confettis), puis bouton pour accéder au terminal
-- **Terminal interactif** — commandes `where`, `more`, `help`, `reset` pour obtenir des indices sur le lieu
+- **Terminal interactif** — permet de poser n'importe quelle question à l'IA (GPT-4o-mini) pour obtenir un indice sur le lieu
 - **Notifications push** — abonnement via Web Push API
 - **PWA** — installable sur mobile et desktop, fonctionne hors-ligne
 
@@ -17,7 +17,7 @@ Démo en ligne : https://save-the-daaate.vercel.app/
 | Côté            | Technologies                                                                                 |
 | --------------- | -------------------------------------------------------------------------------------------- |
 | **Client**      | React 19, TypeScript, Vite, Tailwind CSS 4, React Router, Headless UI, Workbox (PWA), Vitest |
-| **Serveur**     | Node.js, Express 5, TypeScript, Prisma (PostgreSQL), Web Push                                |
+| **Serveur**     | Node.js, Express 5, TypeScript, Prisma (PostgreSQL), Web Push, OpenAI API                    |
 | **Déploiement** | Vercel (server + client)                                                                     |
 
 ## Prérequis
@@ -25,6 +25,7 @@ Démo en ligne : https://save-the-daaate.vercel.app/
 - Node.js 18+
 - Une base de données PostgreSQL
 - Une paire de clés VAPID (pour les notifications push)
+- Une clé API OpenAI (pour 🐱KiwIA)
 
 ## Installation
 
@@ -58,6 +59,7 @@ VAPID_PRIVATE_KEY=<votre_clé_privée_VAPID>
 VAPID_MAILTO=mailto:votre@email.com
 API_URL=http://localhost:4001
 PORT=4001
+OPENAI_API_KEY=<votre_clé_api_openai>
 ```
 
 Pour générer une paire de clés VAPID :
