@@ -3,9 +3,9 @@ import { prisma } from "../lib/prisma";
 import webpush from "web-push";
 
 webpush.setVapidDetails(
-    process.env.MAIL_TO,
-    process.env.PUBLIC_VAPID_KEY,
-    process.env.PRIVATE_VAPID_KEY,
+    process.env.MAIL_TO ?? "",
+    process.env.PUBLIC_VAPID_KEY ?? "",
+    process.env.PRIVATE_VAPID_KEY ?? "",
 );
 
 type PushSubscriptionPayload = {

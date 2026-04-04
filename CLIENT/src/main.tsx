@@ -6,7 +6,7 @@ import App from "./App.tsx";
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("controllerchange", () => {
-        window.location.reload();
+        globalThis.location.reload();
     });
 }
 

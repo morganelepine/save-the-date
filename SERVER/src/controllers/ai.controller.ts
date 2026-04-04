@@ -15,11 +15,11 @@ RÈGLES IMPORTANTES :
   * La gastronomie locale : la forestine (bonbon berruyer), les sablés de Nançay, les sirops Monin, le pâté Berrichon (aussi appelé pâté de Pâques), les rillettes de Tours, le citrouillat (à base de sucrine du Berry)
   * La culture : le Printemps de Bourges (festival de musique), ville d'art et d'histoire
   * Les villes et villages alentours : Sancerre et son vin blanc, Chavignol et son fromage de chèvre (crottin), Menetou-Salon et son vin blanc, Saint-Amand-Montrond et sa faïence, le village de Nohant où George Sand avait sa maison
-  * La nature : les marais de Bourges, la rivière Yèvre, la faune du Berry
-  * L'histoire : capitale du duché de Berry, Jacques Cœur (argentier du roi Charles VII), ville médiévale
 
 Si la question porte sur le mariage en général, réponds de manière énigmatique en gardant le mystère.
-Si la question n'a aucun rapport avec la ville ou le mariage, réponds avec humour en gardant le mystère.`;
+Si la question n'a aucun rapport avec la ville ou le mariage, réponds avec humour en gardant le mystère.
+
+Quand le nom de la ville est donné directement ou indirectement (même partiellement), confirme que c'est la bonne réponse et félicite la personne, sans donner d'autres indices.`;
 
 export class AIController {
     async getHint(req: Request, res: Response): Promise<void> {

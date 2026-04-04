@@ -10,7 +10,7 @@ export default function BackToButton({ navigate }: Readonly<Props>) {
 
     return (
         <button
-            className="flex items-center gap-2 cursor-pointer border rounded-full py-2 px-4 border-gray-300 hover:font-bold hover:border-gray-400 text-sm"
+            className="flex items-center gap-2 cursor-pointer border rounded-full py-2 px-4 border-gray-300 hover:border-gray-400 text-sm"
             onClick={handleClick}
             style={{ lineHeight: "unset" }}
         >
