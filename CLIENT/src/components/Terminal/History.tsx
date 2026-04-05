@@ -8,7 +8,7 @@ export default function History({ history }: Readonly<Props>) {
     const lastCmdRef = useRef<HTMLParagraphElement | null>(null);
 
     useEffect(() => {
-        const last = history[history.length - 1];
+        const last = history.at(-1);
         const isFinalResponse =
             last?.startsWith("[🐱KiwIA]") &&
             last !== "[🐱KiwIA] Laisse-moi réfléchir...";
@@ -26,7 +26,12 @@ export default function History({ history }: Readonly<Props>) {
     );
 
     return (
-        <div className="mt-4">
+        <div
+            role="log"
+            aria-live="polite"
+            aria-label="Historique du terminal"
+            className="mt-4"
+        >
             {history.map((line, index) => {
                 const isCommand = line.startsWith("$");
                 const spacing = isCommand && index !== 0 ? "mt-4" : "mt-1";

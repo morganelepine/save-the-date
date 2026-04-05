@@ -20,6 +20,11 @@ const NotificationsModal = ({ isOpen, setIsOpen, mode }: Readonly<Props>) => {
     const [isLoading, setIsLoading] = useState(false);
     const [feedback, setFeedback] = useState<string | null>(null);
 
+    const closeModal = () => {
+        setIsOpen(false);
+        localStorage.setItem("notificationsModalDismissed", "true");
+    };
+
     const handleSubscribe = async () => {
         setIsLoading(true);
         setFeedback(null);
@@ -127,6 +132,13 @@ const NotificationsModal = ({ isOpen, setIsOpen, mode }: Readonly<Props>) => {
 
                     <div className="flex flex-col items-center justify-center space-y-4">
                         {actionContent}
+
+                        <button
+                            onClick={closeModal}
+                            className="italic text-sm cursor-pointer hover:underline hover:underline-offset-6"
+                        >
+                            Ne plus me demander
+                        </button>
 
                         {feedback && (
                             <p className="text-sm text-stone-700 italic">

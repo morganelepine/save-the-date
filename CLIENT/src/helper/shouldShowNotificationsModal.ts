@@ -9,9 +9,11 @@ export type NotificationsModalState = {
 };
 
 export const getNotificationsModalState = (): NotificationsModalState => {
+    const dismissed =
+        localStorage.getItem("notificationsModalDismissed") === "true";
     const typewriterIsOver =
         localStorage.getItem("typewriterIsOver") === "true";
-    if (!typewriterIsOver) {
+    if (!typewriterIsOver || dismissed) {
         return { shouldOpen: false, mode: "subscribe" };
     }
 

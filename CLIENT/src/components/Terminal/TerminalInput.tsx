@@ -37,6 +37,7 @@ export default function TerminalInput({
             <div className="flex">
                 <span className="text-white pr-2">$</span>
                 <input
+                    aria-label="Commande du terminal"
                     className="text-white outline-none border-none w-full"
                     autoFocus
                     type="text"

@@ -5,6 +5,16 @@ type Props = {
 };
 
 const TypewriterText = ({ setTypewriterIsOver }: Props) => {
+    const prefersReducedMotion = globalThis.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+        setTypewriterIsOver(true);
+        localStorage.setItem("typewriterIsOver", "true");
+        return null;
+    }
+
     return (
         <Typewriter
             onInit={(typewriter) => {

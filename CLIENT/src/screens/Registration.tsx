@@ -16,7 +16,10 @@ const Registration = ({ navigate }: Props) => {
         <Background>
             <AddToScreenModal isOpen={modalIsOpen} setIsOpen={setModalIsOpen} />
             <div className="flex flex-col justify-center items-center m-4 space-y-6 h-full sm:w-lg">
-                <h1 className="abril-fatface-regular text-2xl">
+                <h1
+                    className="abril-fatface-regular text-2xl"
+                    aria-label="Bienvenue"
+                >
                     {colorTitle("Bienvenue")}
                 </h1>
                 <Button

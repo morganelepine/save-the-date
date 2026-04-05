@@ -10,7 +10,8 @@ export default function BackToButton({ navigate }: Readonly<Props>) {
 
     return (
         <button
-            className="flex items-center gap-2 cursor-pointer border rounded-full py-2 px-4 border-gray-300 hover:border-gray-400 text-sm"
+            aria-label="Retour au Save the Date"
+            className="flex items-center gap-2 cursor-pointer border rounded-full py-2 px-4 border-gray-300 hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 text-sm"
             onClick={handleClick}
             style={{ lineHeight: "unset" }}
         >

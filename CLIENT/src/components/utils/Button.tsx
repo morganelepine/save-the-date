@@ -17,7 +17,7 @@ const Button = ({
     disabled,
     onClick,
 }: ButtonProps) => {
-    const baseClasses = `text-white rounded-full px-8 py-2 ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer "}`;
+    const baseClasses = `text-white rounded-full px-8 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-rose-500 ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer "}`;
     const colorMap = {
         green: {
             bg: "bg-gradient-to-r from-teal-600 to-emerald-500",
