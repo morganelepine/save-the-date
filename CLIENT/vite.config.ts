@@ -26,7 +26,6 @@ export default defineConfig({
                 // Serve index.html for any navigation request not matched by a precached asset,
                 // which is required for client-side routing (React Router) to work offline.
                 navigateFallback: "/index.html",
-                importScripts: ["/service-worker/push.js"],
             },
             includeAssets: ["icon-192.png", "icon-512.png", "15.png"],
             manifest: {

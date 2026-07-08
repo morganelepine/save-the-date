@@ -6,4 +6,3 @@ tmp/
 temp/
 .env
 .env.production
-/generated/prisma

@@ -5,26 +5,21 @@
     "scripts": {
         "dev": "nodemon src/server.ts",
         "start": "node dist/server.js",
-        "postinstall": "prisma generate",
-        "build": "prisma generate && prisma migrate deploy && tsc",
+        "build": "tsc",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-        "@prisma/client": "^6.15.0",
         "cors": "^2.8.5",
         "express": "^5.1.0",
         "openai": "^6.33.0",
         "postinstall": "^0.11.2",
-        "prisma": "^6.15.0",
-        "ts-node": "^10.9.2",
-        "web-push": "^3.6.7"
+        "ts-node": "^10.9.2"
     },
     "devDependencies": {
         "@types/body-parser": "^1.19.6",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.3",
         "@types/node": "^24.10.9",
-        "@types/web-push": "^3.6.4",
         "concurrently": "^9.0.0",
         "dotenv": "^17.2.3",
         "nodemon": "^3.1.10",

@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import Background from "../components/utils/Background";
 import Text from "../components/SaveTheDate/Text";
 import Button from "../components/utils/Button";
-import NotificationsModal from "../components/SaveTheDate/NotificationsModal";
 import Celebration from "../components/SaveTheDate/Celebration";
-import { getNotificationsModalState } from "../helper/shouldShowNotificationsModal";
 
 type Props = {
     navigate: (path: string) => void;
@@ -17,11 +15,6 @@ const SaveTheDate = ({
     typewriterIsOver,
     setTypewriterIsOver,
 }: Props) => {
-    const initialModalState = getNotificationsModalState();
-    const [modalIsOpen, setModalIsOpen] = useState(
-        initialModalState.shouldOpen,
-    );
-    const [notificationsModalMode] = useState(initialModalState.mode);
     const [showCelebration, setShowCelebration] = useState(false);
     const [showFormattedText, setShowFormattedText] =
         useState(typewriterIsOver);
@@ -44,12 +37,6 @@ const SaveTheDate = ({
     return (
         <Background>
             <div className="flex flex-col w-full sm:max-w-4xl">
-                <NotificationsModal
-                    isOpen={modalIsOpen}
-                    setIsOpen={setModalIsOpen}
-                    mode={notificationsModalMode}
-                ></NotificationsModal>
-
                 <Text
                     typewriterIsOver={typewriterIsOver}
                     showFormattedText={showFormattedText}
